@@ -32,7 +32,7 @@ class PriorityQueue(object):
         queue (list): Nodes added to the priority queue.
     """
 
-    def __init__(self):
+    def _init_(self):
         """Initialize a new Priority Queue."""
 
         self.queue = []
@@ -60,12 +60,12 @@ class PriorityQueue(object):
         self.queue.pop(node_id)
         heapq.heapify(self.queue)
 
-    def __iter__(self):
+    def _iter_(self):
         """Queue iterator."""
 
         return iter(sorted(self.queue))
 
-    def __str__(self):
+    def _str_(self):
         """Priority Queue to string."""
 
         return 'PQ:%s' % self.queue
@@ -79,7 +79,7 @@ class PriorityQueue(object):
         """
         heapq.heappush(self.queue, node)
 
-    def __contains__(self, key):
+    def _contains_(self, key):
         """
         Containment Check operator for 'in'
 
@@ -92,7 +92,7 @@ class PriorityQueue(object):
 
         return key in [n for _, n in self.queue]
 
-    def __eq__(self, other):
+    def _eq_(self, other):
         """
         Compare this Priority Queue with another Priority Queue.
 
@@ -200,14 +200,14 @@ def astar_search(graph, start, goal):
         return path, explored_nodes
 
     path.append(start)
-    path_cost = get_manhattan_heuristic(start, goal)
+    path_cost = get_geographical_heutristic(start, goal)
     # Priority Queue to keep sorted distance travelled till now
     frontier = [(path_cost, path)]
     while len(frontier) > 0:
         # pop a node from the queue
         path_cost_till_now, path_till_now = pop_frontier(frontier)
         current_node = path_till_now[-1]
-        path_cost_till_now = path_cost_till_now - get_manhattan_heuristic(current_node, goal)
+        path_cost_till_now = path_cost_till_now - get_geographical_heutristic(current_node, goal)
         explored_nodes.append(current_node)
         # test goal condition
         if current_node == goal:
@@ -225,7 +225,7 @@ def astar_search(graph, start, goal):
 
             # extra_cost = graph.get_edge_weight(current_node, neighbour)
             extra_cost = 1
-            neighbour_cost = extra_cost + path_cost_till_now + get_manhattan_heuristic(neighbour, goal)
+            neighbour_cost = extra_cost + path_cost_till_now + get_geographical_heutristic(neighbour, goal)
             new_element = (neighbour_cost, path_to_neighbour)
 
             is_there, indexx, neighbour_old_cost, _ = get_frontier_params_new(neighbour, frontier)
@@ -302,26 +302,27 @@ def get_geographical_heutristic(node, goal):
     geographical_dist = (i_delta + j_delta)**0.5
     return geographical_dist
 
+
 if __name__ == '__main__':
     graph_neighbours = generate_graph()
 
     print("============ UCS Search ================")
-    path_ucs, explored_ucs = uniform_cost_search(graph_neighbours, '0', '61')
+    path_ucs, explored_ucs = uniform_cost_search(graph_neighbours, '0', '50')
     print("Path UCS:", path_ucs)
     # print("Explored Nodes UCS: ", explored_ucs)
     print(len(explored_ucs))
     print()
 
     print("============ AStar Search ================")
-    path_astar, explored_astar = astar_search(graph_neighbours, '0', '61')
+    path_astar, explored_astar = astar_search(graph_neighbours, '0', '50')
     print("Path_astar:", path_astar)
     print("Explored Nodes A Star: ", explored_astar)
     print(len(explored_astar))
     print()
 
     print("============ Bottleneck Astar Search ================")
-    path_1, explored_1 = astar_search(graph_neighbours, '0', '27')
-    path_2, explored_2 = astar_search(graph_neighbours, '35', '61')
+    path_1, explored_1 = astar_search(graph_neighbours, '0', '50')
+    path_2, explored_2 = astar_search(graph_neighbours, '0', '50')
     print("Path1:", path_1)
     print("Path_2:", path_2)
 
